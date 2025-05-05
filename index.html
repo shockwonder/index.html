@@ -2,84 +2,128 @@
 <html>
 <head>
   <title>Guessing Game</title>
-  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 </head>
 <body>
   <h1>Guessing Game</h1>
-
   <button id="enterBtn">Enter Game</button>
-
   <div id="guessSection" style="display:none;">
-    <input type="number" id="guessInput" min="0" max="255" placeholder="Enter your guess">
-    <button onclick="submitGuess()">Submit Guess</button>
+    <input type="number" id="guessInput" min="0" max="255" placeholder="Enter your guess (0-255)">
+    <button id="submitGuess">Submit Guess</button>
   </div>
-
   <p id="status"></p>
 
   <script>
-    const abi = [
-      {"inputs":[{"internalType":"uint8","name":"_winningNumber","type":"uint8"}],"name":"endRound","outputs":[],"stateMutability":"nonpayable","type":"function"},
-      {"inputs":[],"name":"enterGame","outputs":[],"stateMutability":"payable","type":"function"},
-      {"inputs":[{"internalType":"uint8","name":"guess","type":"uint8"}],"name":"submitGuess","outputs":[],"stateMutability":"nonpayable","type":"function"},
-      {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
-      {"inputs":[],"name":"withdrawFees","outputs":[],"stateMutability":"nonpayable","type":"function"},
-      {"stateMutability":"payable","type":"receive"},
-      {"inputs":[],"name":"entryFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-      {"inputs":[],"name":"getContractBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-      {"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"}],"name":"guesses","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},
-      {"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"}],"name":"hasPaid","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
-      {"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-      {"inputs":[],"name":"ownerBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-      {"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"players","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-      {"inputs":[],"name":"round","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-      {"inputs":[],"name":"showWinningNumber","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},
-      {"inputs":[],"name":"winningNumber","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"}
+    const contractAddress = "0x5ed7f1367e8b92730206b5a37987ef0f1d2371d7";
+    const abi = [ /* Paste the ABI you shared here */ 
+      {
+        "inputs": [{"internalType": "uint8","name": "_winningNumber","type": "uint8"}],
+        "name": "endRound","outputs": [],"stateMutability": "nonpayable","type": "function"
+      },
+      {
+        "inputs": [],"name": "enterGame","outputs": [],
+        "stateMutability": "payable","type": "function"
+      },
+      {
+        "inputs": [{"internalType": "uint8","name": "guess","type": "uint8"}],
+        "name": "submitGuess","outputs": [],"stateMutability": "nonpayable","type": "function"
+      },
+      {
+        "inputs": [],"stateMutability": "nonpayable","type": "constructor"
+      },
+      {
+        "inputs": [],"name": "withdrawFees","outputs": [],
+        "stateMutability": "nonpayable","type": "function"
+      },
+      {
+        "stateMutability": "payable","type": "receive"
+      },
+      {
+        "inputs": [],"name": "entryFee","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],
+        "stateMutability": "view","type": "function"
+      },
+      {
+        "inputs": [],"name": "getContractBalance","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],
+        "stateMutability": "view","type": "function"
+      },
+      {
+        "inputs": [{"internalType": "uint256","name": "","type": "uint256"},{"internalType": "address","name": "","type": "address"}],
+        "name": "guesses","outputs": [{"internalType": "uint8","name": "","type": "uint8"}],
+        "stateMutability": "view","type": "function"
+      },
+      {
+        "inputs": [{"internalType": "uint256","name": "","type": "uint256"},{"internalType": "address","name": "","type": "address"}],
+        "name": "hasPaid","outputs": [{"internalType": "bool","name": "","type": "bool"}],
+        "stateMutability": "view","type": "function"
+      },
+      {
+        "inputs": [],"name": "owner","outputs": [{"internalType": "address","name": "","type": "address"}],
+        "stateMutability": "view","type": "function"
+      },
+      {
+        "inputs": [],"name": "ownerBalance","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],
+        "stateMutability": "view","type": "function"
+      },
+      {
+        "inputs": [{"internalType": "uint256","name": "","type": "uint256"},{"internalType": "uint256","name": "","type": "uint256"}],
+        "name": "players","outputs": [{"internalType": "address","name": "","type": "address"}],
+        "stateMutability": "view","type": "function"
+      },
+      {
+        "inputs": [],"name": "round","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],
+        "stateMutability": "view","type": "function"
+      },
+      {
+        "inputs": [],"name": "showWinningNumber","outputs": [{"internalType": "uint8","name": "","type": "uint8"}],
+        "stateMutability": "view","type": "function"
+      },
+      {
+        "inputs": [],"name": "winningNumber","outputs": [{"internalType": "uint8","name": "","type": "uint8"}],
+        "stateMutability": "view","type": "function"
+      }
     ];
 
-    const contractAddress = "0x5ed7f1367e8b92730206b5a37987ef0f1d2371d7";
+    let web3;
     let contract;
     let accounts;
 
-    async function init() {
-      if (typeof window.ethereum !== 'undefined') {
-        const web3 = new Web3(window.ethereum);
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
+    window.addEventListener('load', async () => {
+      if (window.ethereum) {
+        web3 = new Web3(window.ethereum);
+        await window.ethereum.enable();
         accounts = await web3.eth.getAccounts();
         contract = new web3.eth.Contract(abi, contractAddress);
-
-        document.getElementById('enterBtn').onclick = async () => {
-          try {
-            const fee = await contract.methods.entryFee().call();
-            await contract.methods.enterGame().send({
-              from: accounts[0],
-              value: fee
-            });
-            document.getElementById('status').innerText = "Entered the game!";
-            document.getElementById('enterBtn').style.display = 'none';
-            document.getElementById('guessSection').style.display = 'block';
-          } catch (error) {
-            console.error(error);
-            document.getElementById('status').innerText = "Error entering the game.";
-          }
-        };
       } else {
-        alert('Please install MetaMask to use this dApp!");
+        alert("Please install MetaMask.");
+        return;
       }
-    }
 
-    async function submitGuess() {
-      const guess = document.getElementById('guessInput').value;
-      if (guess === '') return;
-      try {
-        await contract.methods.submitGuess(guess).send({ from: accounts[0] });
-        document.getElementById('status').innerText = "Guess submitted!";
-      } catch (err) {
-        console.error(err);
-        document.getElementById('status').innerText = "Error submitting guess.";
-      }
-    }
+      document.getElementById('enterBtn').onclick = async () => {
+        try {
+          await contract.methods.enterGame().send({
+            from: accounts[0],
+            value: web3.utils.toWei("0.0001", "ether")
+          });
+          document.getElementById('status').innerText = "Entered the game!";
+          document.getElementById('enterBtn').style.display = 'none';
+          document.getElementById('guessSection').style.display = 'block';
+        } catch (error) {
+          console.error(error);
+          document.getElementById('status').innerText = "Error entering the game.";
+        }
+      };
 
-    window.addEventListener('load', init);
+      document.getElementById('submitGuess').onclick = async () => {
+        const guess = document.getElementById('guessInput').value;
+        try {
+          await contract.methods.submitGuess(guess).send({ from: accounts[0] });
+          document.getElementById('status').innerText = `Guess ${guess} submitted.`;
+        } catch (error) {
+          console.error(error);
+          document.getElementById('status').innerText = "Error submitting guess.";
+        }
+      };
+    });
   </script>
 </body>
 </html>
